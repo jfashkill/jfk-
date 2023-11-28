@@ -8,14 +8,19 @@
 
 using namespace std;
 
-// define functions
+// menu functions
 void circleArea();
 void taxCal();
 void lb2kg();
 void pause();
-float getPrice();
-float getTaxRate();
+string getName();
+// functions for taxCal()
+float getPrice(), getTaxRate();
 float calculateTax(float price, float taxr, float tax, string name);
+// functions for circleArea()
+float getRad(), calculateArea(float rad, float area, string name);
+// functions for lb2kg()
+float getLb(), calculateKg(float lb, float kg, string name);
 
 int main()
 {
@@ -44,7 +49,7 @@ int main()
         // switch loop for choices
         switch (choice)
         {
-            char pr;
+
 
         case 1: // runs area of a circle
             circleArea();
@@ -62,14 +67,13 @@ int main()
             system("clear");
             cout << "Press Y to repeat the program" << endl;
             cout << "Any other input will terminate" << endl;
+            char pr;
             cin >> pr;
-            if (tolower(pr) != 'y')
-            {
-                system("clear");
-                quit = true;
-            }
-            else
+
+            if (tolower(pr) == 'y')
                 break;
+            system("clear");
+            quit = true;
 
         default:
             pause();
@@ -84,16 +88,13 @@ int main()
 void circleArea()
 {
     // call variables pi, radius, and area. also string for name. Bool to quit.
-    const float PI = 3.14159;
-    string name;
+    // const float PI = 3.14159;
     int choice = 0;
-    double rad = 0, area = 0;
+    float rad = 0, area = 0;
     bool quit = false;
 
     // prompt for name
-    cout << "please enter your first name: ";
-    cin >> name;
-    cout << "\nhello " << name << endl;
+    string name = getName();
 
     // do while loop to stay or quit circle area.
     do
@@ -103,31 +104,12 @@ void circleArea()
         cout << fixed << setprecision(2);
 
         // this will prompt for the radius over and over to clear 0s and negative numbers
-        while (rad <= 0)
-        {
+        float rad = getRad();
+        float area = calculateArea(rad, area, name);
 
-            cout << "\nPlease enter the radius of your circle: ";
-
-            while (!(cin >> rad) || rad <= 0) // filter strings and chars
-            {
-                cout << "\nError. Incorrect input. \nChoice is not in range 1-2." << endl
-                     << "\nPlease enter radius of circle: ";
-                cin.clear();
-                cin.ignore(123, '\n');
-            }
-
-            // calculate the area and print answer.
-            area += PI * (rad * rad);
-
-            cout << " \n"
-                 << name << endl
-                 << "the area of your circle is " << area << endl;
-            cout << " " << endl;
-
-            // promt to stay or leave
-            cout << "1) To calculate again." << endl;
-            cout << "2) To exit." << endl;
-        }
+        // promt to stay or leave
+        cout << "1) To calculate again." << endl;
+        cout << "2) To exit." << endl;
 
         while (!(cin >> choice) || choice <= 0 || choice >= 3) // filter strings and chars
         {
@@ -136,16 +118,8 @@ void circleArea()
             cin.clear();
             cin.ignore(123, '\n');
         }
-
-        switch (choice) // exit or stay
+        if (choice == 2)
         {
-        case 1:
-
-            area = 0;
-            rad = 0;
-            break;
-
-        case 2:
             cout << "Goodbye" << endl;
             system("clear");
             quit = true;
@@ -157,27 +131,21 @@ void circleArea()
 void taxCal()
 {
     // call variables tax rate, price. also string for name. Bool to quit.
-    string name;
     int choice = 0;
-    double taxr = 0, price = 0, tax = 0, taxA = 0;
+    float taxr = 0, price = 0, tax = 0, taxA = 0;
     bool quit = false;
 
     // prompt for name
-    cout << "please enter your first name: ";
-    cin >> name;
-    cout << "\nhello " << name << endl;
-
+    string name = getName();
     // do while loop to stay or quit circle area.
     do
     {
         // set precision to round up.
         cout << fixed << setprecision(2);
 
-        
         float price = getPrice();
         float taxr = getTaxRate();
         float taxAmount = calculateTax(price, taxr, tax, name);
-
 
         // promt to stay or leave
         cout << "1) To calculate again." << endl;
@@ -203,72 +171,39 @@ void taxCal()
 void lb2kg()
 {
     // call variables lb2kg for conversion, lb, and kg. also string for name. Bool to quit.
-    const float lb2kg = 0.453592;
-    string name;
     int choice = 0;
-    double lb = 0, kg = 0;
+    float lb = 0, kg = 0;
     bool quit = false;
 
     // prompt for name
-    cout << "please enter your first name: ";
-    cin >> name;
-    cout << "\nhello " << name << endl;
+    string name = getName();
 
     // do while loop to stay or quit.
     do
     {
-
         // set precision to round up.
         cout << fixed << setprecision(2);
 
-        // this will prompt for the weight over and over to clear 0s and negative numbers
-        while (lb <= 0)
-        {
+        float lb = getLb();
+        float kg = calculateKg(lb, kg, name);
 
-            cout << "\nPlease enter the weight in pounds/lb: ";
-
-            while (!(cin >> lb) || lb <= 0) // filter strings and chars
-            {
-                cout << "\nError" << endl
-                     << "\nPlease enter the weight in pounds/lb: ";
-                cin.clear();
-                cin.ignore(123, '\n');
-            }
-
-            // calculate the area and print answer.
-            kg += lb * lb2kg;
-
-            cout << " \n"
-                 << name << endl
-                 << "Your weight in Kilograms is " << kg << endl;
-            cout << " " << endl;
-
-            // promt to stay or leave
-            cout << "1) To calculate again." << endl;
-            cout << "2) To exit." << endl;
-        }
+        // promt to stay or leave
+        cout << "1) To calculate again." << endl;
+        cout << "2) To exit." << endl;
 
         while (!(cin >> choice) || choice <= 0 || choice >= 3) // filter strings and chars
         {
-            cout << "\nError" << endl
+            cout << "\nError: Incorrect input. \nChoice is not in range 1-2" << endl
                  << "\nplease enter choices (1-2): ";
             cin.clear();
             cin.ignore(123, '\n');
         }
-
-        switch (choice) // exit or stay
+        if (choice == 2)
         {
-        case 1:
-            lb = 0;
-            kg = 0;
-            break;
-
-        case 2:
             cout << "Goodbye" << endl;
             system("clear");
             quit = true;
         }
-
     } while (!quit);
 }
 
@@ -278,6 +213,16 @@ void pause()
 
     // sleep for 1 second
     std::this_thread::sleep_for(std::chrono::seconds(1));
+}
+
+string getName()
+{
+    string name;
+    cout << "please enter your first name: ";
+    cin >> name;
+    cout << "\nhello " << name << endl;
+
+    return name;
 }
 
 float getPrice()
@@ -326,4 +271,61 @@ float calculateTax(float price, float taxr, float tax, string name)
     cout << " " << endl;
 
     return tax;
+}
+
+float getRad()
+{
+    float rad = 0;
+    while (rad <= 0)
+    {
+        cout << "\nPlease enter the radius of your circle: ";
+        while (!(cin >> rad) || rad <= 0) // filter strings and chars
+        {
+            cout << "\nError. Incorrect input. \nPrice cannot be negative or a string" << endl
+                 << "\nPlease enter valid price: ";
+            cin.clear();
+            cin.ignore(123, '\n');
+        }
+    }
+    return rad;
+}
+
+float calculateArea(float rad, float area, string name)
+{
+    const float PI = 3.14159;
+    area = PI * rad * rad;
+    cout << " \n"
+         << name << endl
+         << "the area of your circle is " << area << endl;
+    cout << " " << endl;
+    return area;
+}
+
+float getLb()
+{
+    float lb = 0;
+    while (lb <= 0)
+    {
+        cout << "\nPlease enter the weight in pounds/lb: ";
+        while (!(cin >> lb) || lb <= 0) // filter strings and chars
+        {
+            cout << "\nError. Incorrect input. \nWeight cannot be negative or a string" << endl
+                 << "\nPlease enter valid price: ";
+            cin.clear();
+            cin.ignore(123, '\n');
+        }
+    }
+    return lb;
+}
+
+float calculateKg(float lb, float kg, string name)
+{
+    const float lb2kg = 0.453592;
+    kg = lb * lb2kg;
+
+    cout << " \n"
+         << name << endl
+         << "Your weight in Kilograms is " << kg << endl;
+    cout << " " << endl;
+    return kg;
 }
